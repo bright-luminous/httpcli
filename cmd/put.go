@@ -1,7 +1,3 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
@@ -16,7 +12,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// rootCmd represents the base command when called without any subcommands
 var putCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	Use:   "put",
@@ -31,11 +26,7 @@ var putCmd = &cobra.Command{
 		fmt.Println(jsonData)
 
 		jsonData1 := strings.Split(jsonData, "'")
-
-		fmt.Println(jsonData1)
-		fmt.Println(jsonData1[3])
 		task := jsonData1[3]
-		fmt.Println(jsonData1[7])
 		description := jsonData1[7]
 
 		requestBody, err := json.Marshal(map[string]string{
@@ -70,37 +61,17 @@ var putCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalln(err)
 		}
-
 		defer resp.Body.Close()
-
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
 			log.Fatalln(err)
 		}
-
 		log.Println(string(body))
 		fmt.Println("get called put")
 	},
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
-
 func init() {
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.httpcli.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
 	rootCmd.AddCommand(putCmd)
 	putCmd.PersistentFlags().String("ID", "", "ID of the task you want.")
 	putCmd.PersistentFlags().String("json", "", "task to be update.")

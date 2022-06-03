@@ -1,7 +1,3 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
@@ -18,14 +14,12 @@ import (
 var queryArr []string
 var headerArr []string
 
-// rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	Use:   "root",
 	Short: "sent GET request to URL",
 	Long:  `sent GET request to URL`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(args)
 		client := &http.Client{}
 
 		finalUrl := args[0]
@@ -38,9 +32,6 @@ var rootCmd = &cobra.Command{
 				}
 			}
 		}
-
-		fmt.Println(finalUrl)
-
 		req, err := http.NewRequest("GET", finalUrl, nil)
 		if err != nil {
 			log.Fatalln(err)
@@ -55,33 +46,21 @@ var rootCmd = &cobra.Command{
 				}
 			}
 		}
-		// client.Head()
-		fmt.Println(req)
 
 		resp, err := client.Do(req)
 		if err != nil {
 			log.Fatalln(err)
 		}
-		//We Read the response body on the line below.
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
 			log.Fatalln(err)
 		}
-		//Convert the body to type string
 		sb := string(body)
 		log.Print(sb)
 		fmt.Println("get called root")
 	},
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {
@@ -90,15 +69,6 @@ func Execute() {
 }
 
 func init() {
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.httpcli.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	// rootCmd.PersistentFlags().String("header", "", "add this key and value into header")
 	rootCmd.PersistentFlags().StringArrayVarP(&headerArr, "header", "", []string{}, "add this key and value into header")
 }
