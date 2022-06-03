@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -26,6 +27,7 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(queryArr)
+		client := &http.Client{}
 
 		ID, _ := cmd.Flags().GetString("ID")
 		finalUrl := args[0] + "/todos/" + ID
@@ -39,10 +41,24 @@ to quickly create a Cobra application.`,
 				}
 			}
 		}
+		req, err := http.NewRequest("GET", finalUrl, nil)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		if len(headerArr) > 0 {
+			for i := range headerArr {
+				headerToAdd := strings.Split(headerArr[i], "=")
+				if len(headerToAdd) > 1 {
+					req.Header.Add(headerToAdd[0], headerToAdd[1])
+				} else {
+					log.Fatalln("wrong header flag")
+				}
+			}
+		}
 
 		fmt.Println(args)
 		fmt.Println(finalUrl)
-		resp, err := http.Get(finalUrl)
+		resp, err := client.Do(req)
 		if err != nil {
 			log.Fatalln(err)
 		}

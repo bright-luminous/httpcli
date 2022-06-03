@@ -25,17 +25,7 @@ var postCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(args)
 		finalUrl := args[0] + "/todos/"
-
-		if len(queryArr) > 0 {
-			finalUrl = finalUrl + "?"
-			for i := range queryArr {
-				finalUrl = finalUrl + queryArr[i]
-				if i+1 < len(queryArr) {
-					finalUrl = finalUrl + "&"
-				}
-			}
-		}
-
+		client := &http.Client{}
 		jsonData, _ := cmd.Flags().GetString("json")
 
 		fmt.Println(jsonData)
@@ -56,7 +46,31 @@ var postCmd = &cobra.Command{
 			log.Fatalln(err)
 		}
 
-		resp, err := http.Post(finalUrl, "application/json", bytes.NewBuffer(requestBody))
+		if len(queryArr) > 0 {
+			finalUrl = finalUrl + "?"
+			for i := range queryArr {
+				finalUrl = finalUrl + queryArr[i]
+				if i+1 < len(queryArr) {
+					finalUrl = finalUrl + "&"
+				}
+			}
+		}
+		req, err := http.NewRequest("POST", finalUrl, bytes.NewBuffer(requestBody))
+		if err != nil {
+			log.Fatalln(err)
+		}
+		if len(headerArr) > 0 {
+			for i := range headerArr {
+				headerToAdd := strings.Split(headerArr[i], "=")
+				if len(headerToAdd) > 1 {
+					req.Header.Add(headerToAdd[0], headerToAdd[1])
+				} else {
+					log.Fatalln("wrong header flag")
+				}
+			}
+		}
+
+		resp, err := client.Do(req)
 		if err != nil {
 			log.Fatalln(err)
 		}

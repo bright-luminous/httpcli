@@ -11,7 +11,6 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/spf13/cobra"
 )
@@ -27,9 +26,7 @@ var rootCmd = &cobra.Command{
 	Long:  `sent GET request to URL`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(args)
-		client := &http.Client{
-			Timeout: time.Second * 10,
-		}
+		client := &http.Client{}
 
 		finalUrl := args[0]
 		if len(queryArr) > 0 {
@@ -44,14 +41,18 @@ var rootCmd = &cobra.Command{
 
 		fmt.Println(finalUrl)
 
-		req, err := http.NewRequest("GET", args[0], nil)
+		req, err := http.NewRequest("GET", finalUrl, nil)
 		if err != nil {
 			log.Fatalln(err)
 		}
 		if len(headerArr) > 0 {
 			for i := range headerArr {
 				headerToAdd := strings.Split(headerArr[i], "=")
-				req.Header.Add(headerToAdd[0], headerToAdd[1])
+				if len(headerToAdd) > 1 {
+					req.Header.Add(headerToAdd[0], headerToAdd[1])
+				} else {
+					log.Fatalln("wrong header flag")
+				}
 			}
 		}
 		// client.Head()
