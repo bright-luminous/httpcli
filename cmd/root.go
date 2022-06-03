@@ -10,9 +10,14 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
+	"time"
 
 	"github.com/spf13/cobra"
 )
+
+var queryArr []string
+var headerArr []string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -22,7 +27,37 @@ var rootCmd = &cobra.Command{
 	Long:  `sent GET request to URL`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(args)
-		resp, err := http.Get(args[0])
+		client := &http.Client{
+			Timeout: time.Second * 10,
+		}
+
+		finalUrl := args[0]
+		if len(queryArr) > 0 {
+			finalUrl = finalUrl + "?"
+			for i := range queryArr {
+				finalUrl = finalUrl + queryArr[i]
+				if i+1 < len(queryArr) {
+					finalUrl = finalUrl + "&"
+				}
+			}
+		}
+
+		fmt.Println(finalUrl)
+
+		req, err := http.NewRequest("GET", args[0], nil)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		if len(headerArr) > 0 {
+			for i := range headerArr {
+				headerToAdd := strings.Split(headerArr[i], "=")
+				req.Header.Add(headerToAdd[0], headerToAdd[1])
+			}
+		}
+		// client.Head()
+		fmt.Println(req)
+
+		resp, err := client.Do(req)
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -63,4 +98,6 @@ func init() {
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// rootCmd.PersistentFlags().String("header", "", "add this key and value into header")
+	rootCmd.PersistentFlags().StringArrayVarP(&headerArr, "header", "", []string{}, "add this key and value into header")
 }

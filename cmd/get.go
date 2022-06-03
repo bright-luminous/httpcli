@@ -15,6 +15,7 @@ import (
 
 // getCmd represents the get command
 var getCmd = &cobra.Command{
+	Args:  cobra.ExactArgs(1),
 	Use:   "get",
 	Short: "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
@@ -24,8 +25,24 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println(queryArr)
+
+		ID, _ := cmd.Flags().GetString("ID")
+		finalUrl := args[0] + "/todos/" + ID
+
+		if len(queryArr) > 0 {
+			finalUrl = finalUrl + "?"
+			for i := range queryArr {
+				finalUrl = finalUrl + queryArr[i]
+				if i+1 < len(queryArr) {
+					finalUrl = finalUrl + "&"
+				}
+			}
+		}
+
 		fmt.Println(args)
-		resp, err := http.Get(args[0])
+		fmt.Println(finalUrl)
+		resp, err := http.Get(finalUrl)
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -43,6 +60,8 @@ to quickly create a Cobra application.`,
 
 func init() {
 	rootCmd.AddCommand(getCmd)
+	getCmd.PersistentFlags().String("ID", "", "ID of the task you want.")
+	rootCmd.PersistentFlags().StringArrayVarP(&queryArr, "query", "", []string{}, "query to be ask.")
 
 	// Here you will define your flags and configuration settings.
 

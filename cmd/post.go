@@ -11,6 +11,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -23,9 +24,29 @@ var postCmd = &cobra.Command{
 	Long:  `post request to url`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(args)
+		finalUrl := args[0] + "/todos/"
 
-		task, _ := cmd.Flags().GetString("json-task")
-		description, _ := cmd.Flags().GetString("json-description")
+		if len(queryArr) > 0 {
+			finalUrl = finalUrl + "?"
+			for i := range queryArr {
+				finalUrl = finalUrl + queryArr[i]
+				if i+1 < len(queryArr) {
+					finalUrl = finalUrl + "&"
+				}
+			}
+		}
+
+		jsonData, _ := cmd.Flags().GetString("json")
+
+		fmt.Println(jsonData)
+
+		jsonData1 := strings.Split(jsonData, "'")
+
+		fmt.Println(jsonData1)
+		fmt.Println(jsonData1[3])
+		task := jsonData1[3]
+		fmt.Println(jsonData1[7])
+		description := jsonData1[7]
 
 		requestBody, err := json.Marshal(map[string]string{
 			"task":        task,
@@ -35,7 +56,7 @@ var postCmd = &cobra.Command{
 			log.Fatalln(err)
 		}
 
-		resp, err := http.Post(args[0], "application/json", bytes.NewBuffer(requestBody))
+		resp, err := http.Post(finalUrl, "application/json", bytes.NewBuffer(requestBody))
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -71,6 +92,5 @@ func init() {
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.AddCommand(postCmd)
-	rootCmd.PersistentFlags().String("json-task", "", "task to be add.")
-	rootCmd.PersistentFlags().String("json-description", "", "description for the task.")
+	postCmd.PersistentFlags().String("json", "", "task to be add.")
 }
