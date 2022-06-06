@@ -2,12 +2,10 @@ package cmd
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -34,26 +32,23 @@ var putCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalln(err)
 		}
-		client := &http.Client{
-			Timeout: 5 * time.Second,
-		}
-
-		fmt.Println(jsonData)
-
-		jsonData1 := strings.Split(jsonData, "'")
-		task := jsonData1[3]
-		description := jsonData1[7]
-
-		requestBody, err := json.Marshal(map[string]string{
-			"task":        task,
-			"description": description,
-		})
+		headerParameters, err := cmd.Flags().GetStringSlice(flagHeader)
 		if err != nil {
 			log.Fatalln(err)
 		}
+		queryParameters, err := cmd.Flags().GetStringSlice(flagQuery)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		client := &http.Client{
+			Timeout: 20 * time.Second,
+		}
 
-		finalUrl = urlAddQuery(finalUrl)
-		req, err := http.NewRequest("PUT", finalUrl, bytes.NewBuffer(requestBody))
+		fmt.Println(jsonData)
+		jsonDataByte := []byte(jsonData)
+
+		finalUrl = urlAddQuery(finalUrl, queryParameters)
+		req, err := http.NewRequest("PUT", finalUrl, bytes.NewBuffer(jsonDataByte))
 		if err != nil {
 			log.Fatalln(err)
 		}

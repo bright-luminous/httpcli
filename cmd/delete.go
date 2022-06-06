@@ -24,12 +24,20 @@ var deleteCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalln(err)
 		}
+		headerParameters, err := cmd.Flags().GetStringSlice(flagHeader)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		queryParameters, err := cmd.Flags().GetStringSlice(flagQuery)
+		if err != nil {
+			log.Fatalln(err)
+		}
 		finalUrl := args[0] + "/todos/" + ID
 		client := &http.Client{
-			Timeout: 5 * time.Second,
+			Timeout: 20 * time.Second,
 		}
 
-		finalUrl = urlAddQuery(finalUrl)
+		finalUrl = urlAddQuery(finalUrl, queryParameters)
 		req, err := http.NewRequest("DELETE", finalUrl, nil)
 		if err != nil {
 			log.Fatalln(err)

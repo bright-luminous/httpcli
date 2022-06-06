@@ -11,15 +11,16 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var queryParameters []string
-var headerParameters []string
+const flagHeader string = "header"
+const flagQuery string = "query"
 
 func init() {
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	rootCmd.PersistentFlags().StringSliceVarP(&headerParameters, "header", "", []string{}, "add this key and value into header")
+	rootCmd.PersistentFlags().StringSliceP(flagHeader, "", []string{}, "add this key and value into header")
+	rootCmd.PersistentFlags().StringSliceP(flagQuery, "", []string{}, "query to be ask.")
 }
 
-func urlAddQuery(finalUrl string) string {
+func urlAddQuery(finalUrl string, queryParameters []string) string {
 	if len(queryParameters) > 0 {
 		finalUrl = finalUrl + "?"
 		for i := range queryParameters {
@@ -52,12 +53,20 @@ var rootCmd = &cobra.Command{
 	Short: "sent GET request to URL",
 	Long:  `sent GET request to URL`,
 	Run: func(cmd *cobra.Command, args []string) {
+		headerParameters, err := cmd.Flags().GetStringSlice(flagHeader)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		queryParameters, err := cmd.Flags().GetStringSlice(flagQuery)
+		if err != nil {
+			log.Fatalln(err)
+		}
 		client := &http.Client{
-			Timeout: 5 * time.Second,
+			Timeout: 20 * time.Second,
 		}
 
 		finalUrl := args[0]
-		finalUrl = urlAddQuery(finalUrl)
+		finalUrl = urlAddQuery(finalUrl, queryParameters)
 		req, err := http.NewRequest("GET", finalUrl, nil)
 		if err != nil {
 			log.Fatalln(err)
