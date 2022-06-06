@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"bytes"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -44,7 +43,6 @@ var putCmd = &cobra.Command{
 			Timeout: 20 * time.Second,
 		}
 
-		fmt.Println(jsonData)
 		jsonDataByte := []byte(jsonData)
 
 		finalUrl = urlAddQuery(finalUrl, queryParameters)
