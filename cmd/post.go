@@ -8,9 +8,15 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/spf13/cobra"
 )
+
+func init() {
+	rootCmd.AddCommand(postCmd)
+	postCmd.PersistentFlags().String("json", "", "task to be add.")
+}
 
 var postCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
@@ -19,8 +25,13 @@ var postCmd = &cobra.Command{
 	Long:  `post request to url`,
 	Run: func(cmd *cobra.Command, args []string) {
 		finalUrl := args[0] + "/todos/"
-		jsonData, _ := cmd.Flags().GetString("json")
-		client := &http.Client{}
+		jsonData, err := cmd.Flags().GetString("json")
+		if err != nil {
+			log.Fatalln(err)
+		}
+		client := &http.Client{
+			Timeout: 5 * time.Second,
+		}
 
 		fmt.Println(jsonData)
 
@@ -36,29 +47,12 @@ var postCmd = &cobra.Command{
 			log.Fatalln(err)
 		}
 
-		if len(queryArr) > 0 {
-			finalUrl = finalUrl + "?"
-			for i := range queryArr {
-				finalUrl = finalUrl + queryArr[i]
-				if i+1 < len(queryArr) {
-					finalUrl = finalUrl + "&"
-				}
-			}
-		}
+		finalUrl = urlAddQuery(finalUrl)
 		req, err := http.NewRequest("POST", finalUrl, bytes.NewBuffer(requestBody))
 		if err != nil {
 			log.Fatalln(err)
 		}
-		if len(headerArr) > 0 {
-			for i := range headerArr {
-				headerToAdd := strings.Split(headerArr[i], "=")
-				if len(headerToAdd) > 1 {
-					req.Header.Add(headerToAdd[0], headerToAdd[1])
-				} else {
-					log.Fatalln("wrong header flag")
-				}
-			}
-		}
+		req = reqAddHeader(headerParameters, req)
 
 		resp, err := client.Do(req)
 		if err != nil {
@@ -69,12 +63,7 @@ var postCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalln(err)
 		}
-		log.Println(string(body))
-		fmt.Println("get called post")
+		strBody := string(body)
+		log.Print(strBody)
 	},
-}
-
-func init() {
-	rootCmd.AddCommand(postCmd)
-	postCmd.PersistentFlags().String("json", "", "task to be add.")
 }

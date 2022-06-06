@@ -1,6 +1,4 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
-make: *** No rule to make target 'all'.  Stop.
-
 # GNU Make 4.3
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2020 Free Software Foundation, Inc.
@@ -8,7 +6,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri Jun  3 08:55:48 2022
+# Make data base, printed on Mon Jun  6 09:04:00 2022
 
 # Variables
 
@@ -25,7 +23,7 @@ SNAP_INSTANCE_KEY =
 # environment
 GJS_DEBUG_OUTPUT = stderr
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-022a50bf-d86a-49c3-88f3-22f1440f8208.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-8da86e44-3561-4196-92bd-24b7f7e06521.sock
 # environment
 LC_NAME = th_TH.UTF-8
 # environment
@@ -67,7 +65,7 @@ VSCODE_CODE_CACHE_PATH = /home/phirun/.config/Code/CachedData/c3511e6c69bb39013c
 # environment
 LANG = C
 # environment
-XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.WXJ3M1
+XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.D4CEN1
 # default
 .LOADED := 
 # default
@@ -107,7 +105,7 @@ SNAP_REEXEC =
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 7331
+VSCODE_PID = 8486
 # environment
 XDG_SESSION_TYPE = wayland
 # automatic
@@ -115,7 +113,7 @@ XDG_SESSION_TYPE = wayland
 # environment
 BAMF_DESKTOP_FILE_HINT = /var/lib/snapd/desktop/applications/code_code.desktop
 # environment
-SESSION_MANAGER = local/phirun-VirtualBox:@/tmp/.ICE-unix/1793,unix/phirun-VirtualBox:/tmp/.ICE-unix/1793
+SESSION_MANAGER = local/phirun-VirtualBox:@/tmp/.ICE-unix/1817,unix/phirun-VirtualBox:/tmp/.ICE-unix/1817
 # automatic
 *F = $(notdir $*)
 # environment
@@ -163,7 +161,7 @@ LC_TIME = th_TH.UTF-8
 # environment
 SNAP = /snap/code/97
 # environment
-INVOCATION_ID = 6e6f35b80b30412cb86374c13a907d2a
+INVOCATION_ID = 0c1a34f8e9d6485a8c07480aa26bc264
 # environment
 SNAP_REVISION = 97
 # environment
@@ -199,9 +197,9 @@ GIO_LAUNCHED_DESKTOP_FILE = /var/lib/snapd/desktop/applications/code_code.deskto
 # environment
 SNAP_ARCH = amd64
 # makefile
-.DEFAULT_GOAL := run
+.DEFAULT_GOAL := all
 # environment
-SYSTEMD_EXEC_PID = 1827
+SYSTEMD_EXEC_PID = 1848
 # environment
 DISPLAY = :0
 # environment
@@ -217,11 +215,11 @@ SNAP_DATA = /var/snap/code/97
 # environment
 SNAP_CONTEXT = ulez_xSVBNez6ShiJTAQ92DppMRAuH846zK6YqrnKYu9PEtmCI8A
 # environment
-MANAGERPID = 1652
+MANAGERPID = 1679
 # environment
 LC_MEASUREMENT = th_TH.UTF-8
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 7282
+GIO_LAUNCHED_DESKTOP_FILE_PID = 8441
 # environment
 _ = /snap/code/97/usr/share/code/code
 # environment
@@ -231,7 +229,7 @@ XDG_RUNTIME_DIR = /run/user/1000
 # environment
 GDK_PIXBUF_MODULE_FILE = /home/phirun/snap/code/common/.cache/gdk-pixbuf-loaders.cache
 # environment
-JOURNAL_STREAM = 8:24019
+JOURNAL_STREAM = 8:25024
 # environment
 GOMODCACHE = /home/phirun/go/pkg/mod
 # environment
@@ -282,7 +280,7 @@ LC_IDENTIFICATION = th_TH.UTF-8
 SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd/void
 # variable set hash-table stats:
  
-# Load=134/1024=13%, Rehash=0, Collisions=6/164=4%
+# Load=134/1024=13%, Rehash=0, Collisions=6/167=4%
 
 # Pattern-specific Variable Values
 
@@ -300,10 +298,17 @@ SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd
 
 # Files
 
+put:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 13):
+	go run main.go put "http://localhost:3000" --json="{'task': 'go back to work', 'description': 'using bus'}" --ID 01f87aaf-cb92-4e74-bf6a-6c2f4687e532
+
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-02 17:58:39.435370713
+#  Last modified 2022-06-03 16:08:44.052808213
 #  File has been updated.
 #  Successfully updated.
 
@@ -313,38 +318,83 @@ Makefile:
 #  Modification time never checked.
 #  File has not been updated.
 
-# Not a target:
-all:
+all: run
 #  Command line target.
 #  Implicit rule search has been done.
 #  File does not exist.
-#  File has not been updated.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/3=0%
 
 run:
 #  Implicit rule search has not been done.
+#  Implicit/static pattern stem: ''
+#  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# automatic
+# @ := run
+# automatic
+# * := 
+# automatic
+# < := 
+# automatic
+# + := 
+# automatic
+# % := 
+# automatic
+# ^ := 
+# automatic
+# ? := 
+# automatic
+# | := 
+# variable set hash-table stats:
+# Load=8/32=25%, Rehash=0, Collisions=1/11=9%
+#  recipe to execute (from 'Makefile', line 4):
+	go run main.go "http://localhost:3000" --query internal --query personal --header user=hellichoper
+
+delete:
+#  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 2):
-	go run main.go "http://localhost:3000/"
-	go run main.go get "http://localhost:3000/todos"
-	go run main.go post "http://localhost:3000/todos" --json-task="finish this game" --json-description="in 2 day"
-	# go run main.go put
-	# go run main.go delete
+#  recipe to execute (from 'Makefile', line 16):
+	go run main.go delete "http://localhost:3000" --ID 01f87aaf-cb92-4e74-bf6a-6c2f4687e532
+
+get:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 7):
+	go run main.go get "http://localhost:3000"
+
+# Not a target:
+.SUFFIXES:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+post:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 10):
+	go run main.go post "http://localhost:3000" --json="{'task': 'finish the assigment', 'description': 'by tmr maybe?'}"
 
 # files hash-table stats:
-# Load=5/1024=0%, Rehash=0, Collisions=0/15=0%
+# Load=9/1024=1%, Rehash=0, Collisions=0/23=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 19 / storage = 140 B / avg = 7 B
-# current buf: size = 8162 B / used = 140 B / count = 19 / avg = 7 B
+# strcache buffers: 1 (0) / strings = 23 / storage = 169 B / avg = 7 B
+# current buf: size = 8162 B / used = 169 B / count = 23 / avg = 7 B
 
-# strcache performance: lookups = 24 / hit rate = 20%
+# strcache performance: lookups = 36 / hit rate = 36%
 # hash-table stats:
-# Load=19/8192=0%, Rehash=0, Collisions=0/24=0%
-# Finished Make data base on Fri Jun  3 08:55:48 2022
+# Load=23/8192=0%, Rehash=0, Collisions=0/36=0%
+# Finished Make data base on Mon Jun  6 09:04:00 2022
 
  
